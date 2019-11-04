@@ -1,0 +1,2 @@
+bin
+api/v1/*.pb.go

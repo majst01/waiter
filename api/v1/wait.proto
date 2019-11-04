@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package v1;
+
+message AllocRequest {
+    string id = 1;
+    string message = 2;
+}
+message AllocResponse {}
+
+message WaitRequest {
+    string id = 1;
+}
+
+message WaitResponse {
+    string id = 1;
+    string message = 2;
+}
+
+service Wait {
+    rpc Wait (WaitRequest) returns (stream WaitResponse);
+    rpc Alloc (AllocRequest) returns (AllocResponse);
+}
