@@ -11,6 +11,7 @@ import (
 	v1 "github.com/metal-pod/waiter/api/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 )
 
 // Client must implement wait services
@@ -20,8 +21,14 @@ type Client struct {
 }
 
 func NewClient(address string, logger *zap.Logger) (*Client, error) {
+	kacp := keepalive.ClientParameters{
+		Time:                10 * time.Second, // send pings every 10 seconds if there is no activity
+		Timeout:             time.Second,      // wait 1 second for ping ack before considering the connection dead
+		PermitWithoutStream: true,             // send pings even without active streams
+	}
 	opts := []grpc.DialOption{
 		grpc.WithInsecure(),
+		grpc.WithKeepaliveParams(kacp),
 	}
 
 	// Set up a connection to the server.

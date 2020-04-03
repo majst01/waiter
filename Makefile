@@ -21,3 +21,7 @@ server:
 client:
 	go build -tags netgo -o bin/client client/main.go
 	strip bin/client
+
+.PHONY: run-server
+run-server:
+	GODEBUG=http2debug=2 bin/server -port 50052
